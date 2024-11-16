@@ -9,6 +9,7 @@ import Treatments from "./Components/Pages/Treatments";
 import Profile from "./Components/Pages/Profile";
 import Appointment from "./Components/Pages/Appointment";
 import ErrorComponent from "./ErrorComponent";
+import Details from "./Components/Pages/Home/Details";
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
+        loader: ()=>fetch("/service.json"),
         element: <Home></Home>
       },
       {
@@ -31,6 +33,11 @@ const router = createBrowserRouter([
       {
         path: "/appointment",
         element: <Appointment></Appointment>
+      },
+      {
+        path: "/details/:id",
+        loader: ()=>fetch("/service.json"),
+        element: <Details></Details>
       },
     ]
   },
