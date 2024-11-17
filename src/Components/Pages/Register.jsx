@@ -1,29 +1,39 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 const Register = () => {
   const { createUser } = useContext(AuthContext);
+  const [error, setError] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
     const photoURL = e.target.photo.value;
     const email = e.target.email.value;
     const password = e.target.password.value;
+    const confirmPassword = e.target.confirmPassword.value;
+
+    // Confirm password validation
+    if (password !== confirmPassword) {
+      setError("Passwords do not match!");
+      return;
+    }
 
     createUser(email, password)
       .then((userCredential) => {
         // Signed up successfully
         const user = userCredential.user;
         console.log(user);
-        navigate("/login")
+        setError("");
+        navigate("/login");
       })
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
         console.log(errorCode, errorMessage);
+        setError(errorMessage);
       });
   };
   return (
@@ -45,6 +55,7 @@ const Register = () => {
               type="text"
               id="name"
               name="name"
+              required
               placeholder="Enter your full name"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
@@ -79,6 +90,7 @@ const Register = () => {
               type="email"
               id="email"
               name="email"
+              required
               placeholder="Enter your email"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
@@ -96,6 +108,7 @@ const Register = () => {
               type="password"
               id="password"
               name="password"
+              required
               placeholder="Enter your password"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
@@ -113,6 +126,7 @@ const Register = () => {
               type="password"
               id="confirmPassword"
               name="confirmPassword"
+              required
               placeholder="Confirm your password"
               className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
@@ -125,6 +139,7 @@ const Register = () => {
           >
             Register
           </button>
+          {error && <p className="text-red-600">{error}</p>}
         </form>
 
         {/* Login Link */}
