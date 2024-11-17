@@ -1,7 +1,12 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useContext } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "../AuthProvider/AuthProvider";
 
 const Navbar = () => {
+  const { user, signOutUser } = useContext(AuthContext);
+  const handleSignOut = () => {
+    signOutUser();
+  };
   return (
     <div className="navbar text-white bg-gray-600 my-6 rounded-xl">
       <div className="navbar-start">
@@ -40,13 +45,47 @@ const Navbar = () => {
         <a className="btn btn-ghost text-xl">Teeth Wizard</a>
       </div>
       <div className="navbar-center hidden lg:flex gap-5">
-        <NavLink to={"/"} className={({isActive}) => isActive ? "text-red-500" : ""}>Home</NavLink>
-        <NavLink to={"/treatments"} className={({isActive}) => isActive ? "text-red-500" : ""}>Treatments</NavLink>
-        <NavLink to={"/profile"} className={({isActive}) => isActive ? "text-red-500" : ""}>Profile</NavLink>
-        <NavLink to={"/appointment"} className={({isActive}) => isActive ? "text-red-500" : ""}>Appointment</NavLink>
+        <NavLink
+          to={"/"}
+          className={({ isActive }) => (isActive ? "text-red-500" : "")}
+        >
+          Home
+        </NavLink>
+        <NavLink
+          to={"/treatments"}
+          className={({ isActive }) => (isActive ? "text-red-500" : "")}
+        >
+          Treatments
+        </NavLink>
+        <NavLink
+          to={"/profile"}
+          className={({ isActive }) => (isActive ? "text-red-500" : "")}
+        >
+          Profile
+        </NavLink>
+        <NavLink
+          to={"/appointment"}
+          className={({ isActive }) => (isActive ? "text-red-500" : "")}
+        >
+          Appointment
+        </NavLink>
       </div>
       <div className="navbar-end">
-        <a className="btn px-8 text-lg text-gray-600 hover:text-white hover:bg-gray-600">Login</a>
+        {user ? (
+          <button
+            onClick={handleSignOut}
+            className="btn px-8 text-lg text-gray-600 hover:text-white hover:bg-gray-600"
+          >
+            Logout
+          </button>
+        ) : (
+          <Link
+            to="/login"
+            className="btn px-8 text-lg text-gray-600 hover:text-white hover:bg-gray-600"
+          >
+            Login
+          </Link>
+        )}
       </div>
     </div>
   );
